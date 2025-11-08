@@ -23,9 +23,9 @@ export function getMotivationalMessage(
   const messages = {
     morning_low_energy: "It's okay to start slow today. Small steps still move you forward. 🌱",
     morning_high_energy: "Your energy is great! Let's channel it into focused work. ⚡",
-    has_streak: `${profile.current_streak} days strong! You're building amazing habits. 🔥",
+    has_streak: `${profile.current_streak} days strong! You're building amazing habits. 🔥`,
     first_day: "Welcome to your journey! Remember, consistency beats perfection. 💜",
-    made_progress: `You've already studied ${stats.studyMinutes} minutes today. Keep going! 🎯",
+    made_progress: `You've already studied ${stats.studyMinutes} minutes today. Keep going! 🎯`,
     evening: "Take a moment to reflect on today. You showed up, and that's what matters. ✨"
   }
 
