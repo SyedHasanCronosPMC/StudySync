@@ -13,5 +13,18 @@ export default defineConfig({
     port: 3000,
     host: '0.0.0.0',
     strictPort: false,
+    allowedHosts: [
+      'studypal-86.preview.emergentagent.com',
+      'localhost',
+      '.emergentagent.com'
+    ],
+    hmr: {
+      protocol: 'wss',
+      host: 'studypal-86.preview.emergentagent.com',
+      clientPort: 443
+    }
   },
+  define: {
+    'process.env': {}
+  }
 })
