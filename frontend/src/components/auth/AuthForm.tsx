@@ -8,10 +8,11 @@ import { Loader2 } from 'lucide-react'
 
 interface AuthFormProps {
   onSuccess: () => void
+  mode?: 'login' | 'signup'
 }
 
-export function AuthForm({ onSuccess }: AuthFormProps) {
-  const [isLogin, setIsLogin] = useState(true)
+export function AuthForm({ onSuccess, mode = 'login' }: AuthFormProps) {
+  const [isLogin, setIsLogin] = useState(mode === 'login')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
