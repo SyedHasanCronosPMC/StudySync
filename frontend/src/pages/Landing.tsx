@@ -46,7 +46,7 @@ export default function Landing() {
             </Button>
             <Button 
               className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
-              onClick={() => navigate('/auth')}
+              onClick={() => navigate('/signup')}
             >
               Get Started Free
             </Button>
