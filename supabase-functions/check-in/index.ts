@@ -94,13 +94,13 @@ serve(async (req) => {
         yesterday.setDate(yesterday.getDate() - 1)
         const yesterdayStr = yesterday.toISOString().split('T')[0]
 
-        let newStreak = profile.current_streak
+        let newStreak = profile.current_streak || 0
 
         if (!lastCheckIn || lastCheckIn === yesterdayStr) {
-          // Continue streak
+          // Continue or start streak
           newStreak = (profile.current_streak || 0) + 1
         } else if (lastCheckIn !== today) {
-          // Streak broken
+          // Streak broken, restart
           newStreak = 1
         }
 
