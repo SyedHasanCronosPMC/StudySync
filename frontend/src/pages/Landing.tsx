@@ -433,7 +433,7 @@ export default function Landing() {
             <Button 
               className="w-full"
               variant="outline"
-              onClick={() => navigate('/auth')}
+              onClick={() => navigate('/signup')}
             >
               Start Free
             </Button>
