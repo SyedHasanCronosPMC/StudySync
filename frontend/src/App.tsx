@@ -4,6 +4,7 @@ import { supabase } from './lib/supabase'
 import { useStore } from './lib/store'
 import { AuthForm } from './components/auth/AuthForm'
 import { OnboardingWizard } from './components/auth/OnboardingWizard'
+import Landing from './pages/Landing'
 import Dashboard from './pages/Dashboard'
 import PomodoroTimer from './pages/PomodoroTimer'
 import StudyRooms from './pages/StudyRooms'
@@ -77,26 +78,49 @@ function App() {
     )
   }
 
-  // Not authenticated
-  if (!user) {
-    return <AuthForm onSuccess={handleAuthSuccess} />
-  }
-
-  // Need onboarding
-  if (profile && !profile.onboarding_completed) {
-    return <OnboardingWizard onComplete={handleOnboardingComplete} />
-  }
-
-  // Main app
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Dashboard />} />
-        <Route path="/pomodoro" element={<PomodoroTimer />} />
-        <Route path="/study-rooms" element={<StudyRooms />} />
-        <Route path="/progress" element={<Progress />} />
-        <Route path="/settings" element={<Settings />} />
-        <Route path="*" element={<Navigate to="/" replace />} />
+        {/* Public routes - Landing page */}
+        <Route path="/" element={!user ? <Landing /> : <Navigate to="/dashboard" replace />} />
+        <Route path="/landing" element={<Landing />} />
+        
+        {/* Auth route */}
+        <Route 
+          path="/auth" 
+          element={
+            !user ? (
+              <AuthForm onSuccess={handleAuthSuccess} />
+            ) : profile && !profile.onboarding_completed ? (
+              <OnboardingWizard onComplete={handleOnboardingComplete} />
+            ) : (
+              <Navigate to="/dashboard" replace />
+            )
+          } 
+        />
+
+        {/* Protected routes - require authentication */}
+        {user && (
+          <>
+            {profile && !profile.onboarding_completed ? (
+              <Route path="*" element={<OnboardingWizard onComplete={handleOnboardingComplete} />} />
+            ) : (
+              <>
+                <Route path="/dashboard" element={<Dashboard />} />
+                <Route path="/pomodoro" element={<PomodoroTimer />} />
+                <Route path="/study-rooms" element={<StudyRooms />} />
+                <Route path="/progress" element={<Progress />} />
+                <Route path="/settings" element={<Settings />} />
+              </>
+            )}
+          </>
+        )}
+
+        {/* Redirect authenticated users trying to access auth pages */}
+        {user && <Route path="*" element={<Navigate to="/dashboard" replace />} />}
+        
+        {/* Redirect unauthenticated users to landing */}
+        {!user && <Route path="*" element={<Navigate to="/" replace />} />}
       </Routes>
     </BrowserRouter>
   )
