@@ -142,5 +142,3 @@ export function MorningCheckIn({ onComplete }: MorningCheckInProps) {
     </div>
   )
 }
-
-import { Input } from '@/components/ui/input'
