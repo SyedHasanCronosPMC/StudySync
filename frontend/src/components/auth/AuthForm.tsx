@@ -34,9 +34,21 @@ export function AuthForm({ onSuccess }: AuthFormProps) {
         const { data, error } = await supabase.auth.signUp({
           email,
           password,
+          options: {
+            emailRedirectTo: window.location.origin,
+          }
         })
         if (error) throw error
-        onSuccess()
+        
+        // Check if email confirmation is required
+        if (data.user && !data.session) {
+          // Email confirmation required
+          setError('✉️ Success! Please check your email to confirm your account before signing in.')
+          setIsLogin(true) // Switch to login mode after sign up
+        } else if (data.session) {
+          // User is authenticated (email confirmation disabled)
+          onSuccess()
+        }
       }
     } catch (error: any) {
       setError(error.message)
