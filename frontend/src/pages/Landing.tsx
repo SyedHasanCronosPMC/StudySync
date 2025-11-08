@@ -507,7 +507,7 @@ export default function Landing() {
             <Button 
               size="lg"
               className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-lg px-8 py-6"
-              onClick={() => navigate('/auth')}
+              onClick={() => navigate('/signup')}
             >
               Start Your Free Trial
             </Button>
