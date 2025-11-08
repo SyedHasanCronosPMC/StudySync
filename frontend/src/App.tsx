@@ -85,14 +85,34 @@ function App() {
         <Route path="/" element={!user ? <Landing /> : <Navigate to="/dashboard" replace />} />
         <Route path="/landing" element={<Landing />} />
         
-        {/* Auth route */}
+        {/* Auth routes with mode */}
         <Route 
           path="/auth" 
           element={
             !user ? (
-              <AuthForm onSuccess={handleAuthSuccess} />
+              <AuthForm onSuccess={handleAuthSuccess} mode="signup" />
             ) : profile && !profile.onboarding_completed ? (
               <OnboardingWizard onComplete={handleOnboardingComplete} />
+            ) : (
+              <Navigate to="/dashboard" replace />
+            )
+          } 
+        />
+        <Route 
+          path="/signup" 
+          element={
+            !user ? (
+              <AuthForm onSuccess={handleAuthSuccess} mode="signup" />
+            ) : (
+              <Navigate to="/dashboard" replace />
+            )
+          } 
+        />
+        <Route 
+          path="/login" 
+          element={
+            !user ? (
+              <AuthForm onSuccess={handleAuthSuccess} mode="login" />
             ) : (
               <Navigate to="/dashboard" replace />
             )
