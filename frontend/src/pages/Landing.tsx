@@ -40,7 +40,7 @@ export default function Landing() {
             <Button 
               variant="ghost" 
               className="text-gray-300 hover:text-white"
-              onClick={() => navigate('/auth')}
+              onClick={() => navigate('/login')}
             >
               Sign In
             </Button>
@@ -515,7 +515,7 @@ export default function Landing() {
               size="lg"
               variant="outline"
               className="border-purple-700 text-purple-300 hover:bg-purple-900/30 text-lg px-8 py-6"
-              onClick={() => navigate('/auth')}
+              onClick={() => navigate('/login')}
             >
               Sign In
             </Button>
