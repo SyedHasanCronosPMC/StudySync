@@ -100,7 +100,11 @@ export function AuthForm({ onSuccess, mode = 'login' }: AuthFormProps) {
               />
             </div>
             {error && (
-              <div className="text-sm text-red-400 bg-red-900/20 border border-red-800 rounded-md p-3">
+              <div className={`text-sm rounded-md p-3 ${
+                error.includes('Success') || error.includes('✉️')
+                  ? 'text-green-400 bg-green-900/20 border border-green-800'
+                  : 'text-red-400 bg-red-900/20 border border-red-800'
+              }`}>
                 {error}
               </div>
             )}
