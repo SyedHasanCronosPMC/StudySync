@@ -10,7 +10,7 @@ interface AppState {
   logout: () => void
 }
 
-export const useStore = create<AppState>()()
+export const useStore = create<AppState>()(
   persist(
     (set) => ({
       user: null,
