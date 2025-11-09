@@ -78,7 +78,12 @@ function App() {
 
   return (
     <BrowserRouter>
-      <Routes>
+      <Routes
+        future={{
+          v7_startTransition: true,
+          v7_relativeSplatPath: true,
+        }}
+      >
         {/* Public routes - Landing page */}
         <Route path="/" element={!user ? <Landing /> : <Navigate to="/dashboard" replace />} />
         <Route path="/landing" element={<Landing />} />
