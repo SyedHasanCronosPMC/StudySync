@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { supabase, type UserProfile } from './lib/supabase'
 import { useStore } from './lib/store'
 import { callAppFunction } from './lib/api'
+import { fetchOrCreateProfile } from './lib/fallback'
 import { AuthForm } from './components/auth/AuthForm'
 import { OnboardingWizard } from './components/auth/OnboardingWizard'
 import Landing from './pages/Landing'
@@ -11,6 +12,8 @@ import PomodoroTimer from './pages/PomodoroTimer'
 import StudyRooms from './pages/StudyRooms'
 import Progress from './pages/Progress'
 import Settings from './pages/Settings'
+import Tasks from './pages/Tasks'
+import Buddy from './pages/Buddy'
 import './index.css'
 
 function App() {
@@ -18,27 +21,49 @@ function App() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    // Check active session
-    supabase.auth.getSession().then(({ data: { session } }) => {
+    let isMounted = true
+
+    const loadInitialSession = async () => {
+      const {
+        data: { session },
+      } = await supabase.auth.getSession()
+
+      if (!isMounted) return
+
       setUser(session?.user ?? null)
+
       if (session?.user) {
         loadProfile(session.user.id)
       } else {
         setLoading(false)
       }
-    })
+    }
 
-    // Listen for auth changes
+    loadInitialSession()
+
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
+    } = supabase.auth.onAuthStateChange((event, session) => {
+      if (!isMounted) return
+
+      if (event === 'TOKEN_REFRESHED') {
+        return
+      }
+
       setUser(session?.user ?? null)
+
       if (session?.user) {
         loadProfile(session.user.id)
+      } else {
+        setProfile(null)
+        setLoading(false)
       }
     })
 
-    return () => subscription.unsubscribe()
+    return () => {
+      isMounted = false
+      subscription.unsubscribe()
+    }
   }, [])
 
   const loadProfile = async (userId: string) => {
@@ -50,6 +75,12 @@ function App() {
       setProfile(profile)
     } catch (error) {
       console.error('Error loading profile:', error)
+      try {
+        const fallbackProfile = await fetchOrCreateProfile(userId)
+        setProfile(fallbackProfile)
+      } catch (fallbackError) {
+        console.error('Profile fallback failed:', fallbackError)
+      }
     } finally {
       setLoading(false)
     }
@@ -133,6 +164,8 @@ function App() {
                 <Route path="/pomodoro" element={<PomodoroTimer />} />
                 <Route path="/study-rooms" element={<StudyRooms />} />
                 <Route path="/progress" element={<Progress />} />
+                <Route path="/tasks" element={<Tasks />} />
+                <Route path="/buddy" element={<Buddy />} />
                 <Route path="/settings" element={<Settings />} />
               </>
             )}

@@ -1,19 +1,18 @@
 import React, { useState } from 'react'
 import { supabase } from '@/lib/supabase'
-import { useStore } from '@/lib/store'
 import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Loader2, Sun, Sparkles } from 'lucide-react'
+import { buildFunctionHeaders } from '@/lib/api'
 
 interface MorningCheckInProps {
   onComplete: (data: any) => void
 }
 
 export function MorningCheckIn({ onComplete }: MorningCheckInProps) {
-  const { user } = useStore()
   const [energy, setEnergy] = useState(5)
   const [mood, setMood] = useState('')
   const [intention, setIntention] = useState('')
@@ -23,11 +22,10 @@ export function MorningCheckIn({ onComplete }: MorningCheckInProps) {
   const handleSubmit = async () => {
     setLoading(true)
     try {
+      const headers = await buildFunctionHeaders()
+
       const { data, error } = await supabase.functions.invoke('check-in', {
-        headers: {
-          'Content-Type': 'application/json',
-          Accept: 'application/json',
-        },
+        headers,
         body: {
           type: 'morning',
           responses: {

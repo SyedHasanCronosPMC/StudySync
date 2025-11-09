@@ -4,6 +4,8 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { SiteHeader } from '@/components/layout/SiteHeader'
+import { SiteFooter } from '@/components/layout/SiteFooter'
 import { Loader2 } from 'lucide-react'
 
 interface AuthFormProps {
@@ -59,79 +61,85 @@ export function AuthForm({ onSuccess, mode = 'login' }: AuthFormProps) {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background p-4">
-      <Card className="w-full max-w-md border border-border">
-        <CardHeader className="space-y-3">
-          <div className="flex justify-center mb-4">
-            <div className="text-6xl">🧠</div>
-          </div>
-          <CardTitle className="text-3xl text-center text-foreground">
-            StudySync
-          </CardTitle>
-          <CardDescription className="text-center text-base text-muted-foreground">
-            Your AI accountability buddy for focused, consistent learning
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
-              <Input
-                id="email"
-                type="email"
-                placeholder="you@example.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                disabled={loading}
-              />
+    <div className="flex min-h-screen flex-col bg-background">
+      <SiteHeader />
+      <main className="flex flex-1 items-center justify-center px-4 py-12">
+        <Card className="w-full max-w-md border border-border">
+          <CardHeader className="space-y-3">
+            <div className="mb-4 flex justify-center">
+              <div className="text-6xl">🧠</div>
             </div>
-            <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
-              <Input
-                id="password"
-                type="password"
-                placeholder="••••••••"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                disabled={loading}
-                minLength={6}
-              />
-            </div>
-            {error && (
-              <div className={`text-sm rounded-md p-3 ${
-                error.includes('Success') || error.includes('✉️')
-                  ? 'border border-primary/30 bg-accent text-primary-foreground'
-                  : 'border border-destructive/30 bg-destructive/10 text-destructive'
-              }`}>
-                {error}
+            <CardTitle className="text-center text-3xl text-foreground">
+              StudySync
+            </CardTitle>
+            <CardDescription className="text-center text-base text-muted-foreground">
+              Your AI accountability buddy for focused, consistent learning
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="email">Email</Label>
+                <Input
+                  id="email"
+                  type="email"
+                  placeholder="you@example.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                  disabled={loading}
+                />
               </div>
-            )}
-            <Button type="submit" className="w-full bg-primary text-primary-foreground hover:bg-primary/90" disabled={loading}>
-              {loading ? (
-                <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  {isLogin ? 'Signing in...' : 'Signing up...'}
-                </>
-              ) : (
-                <>{isLogin ? 'Sign In' : 'Sign Up'}</>
+              <div className="space-y-2">
+                <Label htmlFor="password">Password</Label>
+                <Input
+                  id="password"
+                  type="password"
+                  placeholder="••••••••"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                  disabled={loading}
+                  minLength={6}
+                />
+              </div>
+              {error && (
+                <div
+                  className={`text-sm rounded-md p-3 ${
+                    error.includes('Success') || error.includes('✉️')
+                      ? 'border border-primary/30 bg-accent text-primary-foreground'
+                      : 'border border-destructive/30 bg-destructive/10 text-destructive'
+                  }`}
+                >
+                  {error}
+                </div>
               )}
-            </Button>
-            <div className="text-center text-sm text-muted-foreground">
-              {isLogin ? "Don't have an account?" : "Already have an account?"}
-              <button
-                type="button"
-                onClick={() => setIsLogin(!isLogin)}
-                className="ml-2 text-primary hover:underline"
-                disabled={loading}
-              >
-                {isLogin ? 'Sign up' : 'Sign in'}
-              </button>
-            </div>
-          </form>
-        </CardContent>
-      </Card>
+              <Button type="submit" className="w-full" disabled={loading}>
+                {loading ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    {isLogin ? 'Signing in...' : 'Signing up...'}
+                  </>
+                ) : (
+                  <>{isLogin ? 'Sign In' : 'Sign Up'}</>
+                )}
+              </Button>
+              <div className="text-center text-sm text-muted-foreground">
+                {isLogin ? "Don't have an account?" : "Already have an account?"}
+                <button
+                  type="button"
+                  onClick={() => setIsLogin(!isLogin)}
+                  className="ml-2 text-primary hover:underline"
+                  disabled={loading}
+                >
+                  {isLogin ? 'Sign up' : 'Sign in'}
+                </button>
+              </div>
+            </form>
+          </CardContent>
+        </Card>
+      </main>
+      <SiteFooter />
     </div>
   )
 }

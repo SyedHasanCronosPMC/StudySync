@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
 import { supabase } from '@/lib/supabase'
-import { useStore } from '@/lib/store'
 import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Loader2, Moon, Sparkles } from 'lucide-react'
+import { buildFunctionHeaders } from '@/lib/api'
 
 interface EveningReflectionProps {
   onComplete: (data: any) => void
@@ -13,7 +13,6 @@ interface EveningReflectionProps {
 }
 
 export function EveningReflection({ onComplete, onSkip }: EveningReflectionProps) {
-  const { user } = useStore()
   const [energy, setEnergy] = useState(5)
   const [wins, setWins] = useState('')
   const [challenges, setChallenges] = useState('')
@@ -23,11 +22,10 @@ export function EveningReflection({ onComplete, onSkip }: EveningReflectionProps
   const handleSubmit = async () => {
     setLoading(true)
     try {
+      const headers = await buildFunctionHeaders()
+
       const { data, error } = await supabase.functions.invoke('check-in', {
-        headers: {
-          'Content-Type': 'application/json',
-          Accept: 'application/json',
-        },
+        headers,
         body: {
           type: 'evening',
           responses: {

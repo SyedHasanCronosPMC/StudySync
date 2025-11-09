@@ -32,9 +32,9 @@ StudySync is an AI-powered accountability companion designed specifically for ne
 - Session statistics
 
 ### 4. **Study Rooms (Real-time Peer Accountability)**
-- Join others studying in real-time
-- Anonymous presence indicators
-- Optional buddy matching
+- Live presence indicators (studying / break / away)
+- Focus trend from the last 24 hours and quick room stats
+- One-click join/leave with calming session defaults
 - Supportive, judgment-free environment
 
 ### 5. **Progress & Gamification**
@@ -42,8 +42,14 @@ StudySync is an AI-powered accountability companion designed specifically for ne
 - Achievement badges celebrating consistency, not perfection
 - Weekly/monthly insights
 - Motivational quotes and affirmations
+- Weekly AI recap summarizing highlights in a friendly tone
 
-### 6. **Neurodivergent-First Design**
+### 6. **Buddy Matching (New)**
+- Queue for an accountability partner with one tap
+- Automatic pairing based on streak energy and timing preferences
+- Gentle nudges, shared wins, and easy pauses/cancellations
+
+### 7. **Neurodivergent-First Design**
 - Dark mode by default
 - Reduced animations option
 - High contrast mode

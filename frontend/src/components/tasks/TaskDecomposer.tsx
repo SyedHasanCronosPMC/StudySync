@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { supabase } from '@/lib/supabase'
 import { useStore } from '@/lib/store'
+import { buildFunctionHeaders } from '@/lib/api'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Card } from '@/components/ui/card'
@@ -24,11 +25,10 @@ export function TaskDecomposer({ onTaskCreated }: TaskDecomposerProps) {
     setError(null)
 
     try {
+      const headers = await buildFunctionHeaders()
+
       const { data, error } = await supabase.functions.invoke('decompose-task', {
-        headers: {
-          'Content-Type': 'application/json',
-          Accept: 'application/json',
-        },
+        headers,
         body: {
           task_input: taskInput,
           user_profile: {
@@ -103,7 +103,7 @@ export function TaskDecomposer({ onTaskCreated }: TaskDecomposerProps) {
               <span className="text-sm text-muted-foreground">{task.duration_minutes} min</span>
             </div>
           ))}
-          <Button className="w-full mt-3 bg-green-600 hover:bg-green-700" onClick={() => setDecomposedTasks([])}>
+          <Button className="w-full mt-3" onClick={() => setDecomposedTasks([])}>
             Start with Task #1
           </Button>
         </Card>

@@ -2,6 +2,14 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import path from 'path'
 
+const previewHost = process.env.VITE_PREVIEW_HOST?.trim()
+const usePreviewProxy = Boolean(previewHost)
+
+const allowedHosts = ['localhost']
+if (usePreviewProxy && previewHost) {
+  allowedHosts.push(previewHost, '.emergentagent.com')
+}
+
 export default defineConfig({
   plugins: [react()],
   resolve: {
@@ -13,18 +21,20 @@ export default defineConfig({
     port: 3000,
     host: '0.0.0.0',
     strictPort: false,
-    allowedHosts: [
-      'studypal-86.preview.emergentagent.com',
-      'localhost',
-      '.emergentagent.com'
-    ],
-    hmr: {
-      protocol: 'wss',
-      host: 'studypal-86.preview.emergentagent.com',
-      clientPort: 443
-    }
+    allowedHosts,
+    hmr: usePreviewProxy && previewHost
+      ? {
+          protocol: 'wss',
+          host: previewHost,
+          clientPort: 443,
+        }
+      : {
+          protocol: 'ws',
+          host: 'localhost',
+          overlay: false,
+        },
   },
   define: {
-    'process.env': {}
-  }
+    'process.env': {},
+  },
 })

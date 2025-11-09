@@ -1,112 +1,169 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
-import {
-  Brain,
-  Target,
-  Users,
-  CheckCircle,
-  Calendar,
-  TrendingUp,
-  Heart,
-  Clock,
-  Sparkles,
-} from 'lucide-react'
+import { Brain, Target, Users, CheckCircle, Calendar, Clock, Sparkles, Heart } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
+import { SiteHeader } from '@/components/layout/SiteHeader'
+import { SiteFooter } from '@/components/layout/SiteFooter'
 
 export default function Landing() {
   const navigate = useNavigate()
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
-      <header className="border-b border-border bg-card">
-        <nav className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
-          <div className="flex items-center gap-2">
-            <Brain className="h-7 w-7 text-primary" />
-            <span className="text-xl font-semibold text-foreground">StudySync</span>
-          </div>
-          <div className="flex items-center gap-3 text-sm">
-            <Button variant="ghost" className="text-foreground hover:bg-accent" onClick={() => navigate('/login')}>
-              Sign In
-            </Button>
-            <Button className="bg-primary hover:bg-primary/90" onClick={() => navigate('/signup')}>
-              Get Started
-            </Button>
-          </div>
-        </nav>
-      </header>
+    <div className="flex min-h-screen flex-col bg-background text-foreground">
+      <SiteHeader />
 
-      <main>
+      <main className="flex-1">
         {/* Hero */}
-        <section className="mx-auto flex max-w-6xl flex-col gap-12 px-6 py-16 md:flex-row md:items-center">
-          <div className="flex-1 space-y-6">
-            <span className="inline-flex items-center gap-2 rounded-full border border-border bg-secondary px-3 py-1 text-sm text-secondary-foreground">
-              <Sparkles className="h-4 w-4 text-primary" />
-              Built for neurodivergent students
-            </span>
-            <h1 className="text-4xl font-semibold tracking-tight text-foreground md:text-5xl">
-              A calm accountability space for consistent study habits
-            </h1>
-            <p className="max-w-xl text-base text-muted-foreground md:text-lg">
-              StudySync keeps you on track with daily check-ins, gentle nudges, and community support.
-              Designed for ADHD, dyslexia, and learners who thrive with structure.
-            </p>
-            <div className="flex flex-col gap-3 sm:flex-row">
-              <Button size="lg" className="bg-primary px-8 text-base font-semibold text-primary-foreground hover:bg-primary/90" onClick={() => navigate('/signup')}>
-                Start free trial
-              </Button>
-              <Button
-                size="lg"
-                variant="outline"
-                className="border border-border px-8 text-base font-semibold text-foreground hover:bg-secondary"
-                onClick={() => document.getElementById('how-it-works')?.scrollIntoView({ behavior: 'smooth' })}
-              >
-                See how it works
-              </Button>
-            </div>
-            <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
-              <div className="flex items-center gap-2">
-                <CheckCircle className="h-4 w-4 text-primary" />
-                No credit card needed
+        <section className="mx-auto max-w-7xl px-6 py-20">
+          <div className="grid gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,520px)] lg:items-center">
+            <div className="space-y-8">
+              <span className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-1 text-sm font-medium text-primary">
+                <Sparkles className="h-4 w-4" /> Calm focus in five minutes
+              </span>
+              <h1 className="text-4xl font-semibold tracking-tight text-foreground md:text-6xl">
+                Build a study rhythm that feels gentle—and actually sticks.
+              </h1>
+              <p className="max-w-xl text-lg text-muted-foreground">
+                StudySync blends quick rituals, adaptive AI nudges, and quiet buddy accountability so you can start, stay, and finish without the guilt spiral.
+              </p>
+              <div className="flex flex-col gap-3 sm:flex-row">
+                <Button size="lg" className="px-8 text-base font-semibold" onClick={() => navigate('/signup')}>
+                  Start free trial
+                </Button>
+                <Button
+                  size="lg"
+                  variant="outline"
+                  className="px-8 text-base font-semibold"
+                  onClick={() => document.getElementById('how-it-works')?.scrollIntoView({ behavior: 'smooth' })}
+                >
+                  Watch the flow
+                </Button>
               </div>
-              <div className="flex items-center gap-2">
-                <Users className="h-4 w-4 text-primary" />
-                500+ learners onboard
-              </div>
-              <div className="flex items-center gap-2">
-                <Clock className="h-4 w-4 text-primary" />
-                15 minute setup
+              <div className="flex flex-wrap gap-3 text-sm text-muted-foreground">
+                <span className="inline-flex items-center gap-2 rounded-full border border-border px-3 py-1">
+                  <CheckCircle className="h-4 w-4 text-primary" /> Designed for ADHD & dyslexia
+                </span>
+                <span className="inline-flex items-center gap-2 rounded-full border border-border px-3 py-1">
+                  <Clock className="h-4 w-4 text-primary" /> 15-minute onboarding
+                </span>
+                <span className="inline-flex items-center gap-2 rounded-full border border-border px-3 py-1">
+                  <Users className="h-4 w-4 text-primary" /> 500+ learners held accountable
+                </span>
               </div>
             </div>
-          </div>
-          <div className="flex-1">
-            <Card className="border-border bg-card p-6 shadow-sm">
-              <div className="space-y-5">
-                <div>
-                  <p className="text-sm font-medium text-muted-foreground">Daily check-in</p>
-                  <p className="mt-2 text-lg font-semibold text-foreground">“What’s one win you want today?”</p>
-                  <div className="mt-4 grid gap-2 text-sm">
-                    {['Prep slides for Biology', 'Review Spanish verbs', 'Email project partner'].map((option) => (
-                      <span key={option} className="rounded-lg border border-border bg-secondary px-3 py-2 text-secondary-foreground">
-                        {option}
-                      </span>
-                    ))}
+
+            <div className="relative">
+              <div className="relative overflow-hidden rounded-[32px] border border-primary/20 bg-gradient-to-br from-primary/90 via-primary/80 to-primary/60 text-primary-foreground shadow-2xl">
+                <div className="absolute -top-16 -left-10 h-40 w-40 rounded-full bg-white/20 blur-3xl" aria-hidden="true" />
+                <div className="absolute -bottom-20 right-0 h-44 w-44 rounded-full bg-white/10 blur-3xl" aria-hidden="true" />
+                <div className="relative space-y-6 p-8">
+                  <div className="flex items-center justify-between rounded-2xl bg-black/10 px-4 py-3">
+                    <div>
+                      <p className="text-sm uppercase tracking-wide text-primary-foreground/70">Tonight&apos;s pace</p>
+                      <p className="text-lg font-semibold">Focus + Reflect</p>
+                    </div>
+                    <div className="text-right">
+                      <p className="text-3xl font-bold">25:00</p>
+                      <p className="text-xs text-primary-foreground/70">gentle timer</p>
+                    </div>
+                  </div>
+
+                  <div className="space-y-3 rounded-2xl bg-black/10 p-5">
+                    <h3 className="text-sm font-semibold uppercase tracking-wide text-primary-foreground/70">Micro-plan</h3>
+                    <div className="space-y-2 text-sm">
+                      <div className="rounded-lg bg-white/15 px-4 py-3">
+                        <p className="font-semibold">1. Settle in (2 min)</p>
+                        <p className="text-xs text-primary-foreground/70">Breathe + choose your win</p>
+                      </div>
+                      <div className="rounded-lg bg-white/10 px-4 py-3">
+                        <p className="font-semibold">2. Focus sprint (20 min)</p>
+                        <p className="text-xs text-primary-foreground/70">Stay on the single next step</p>
+                      </div>
+                      <div className="rounded-lg bg-white/15 px-4 py-3">
+                        <p className="font-semibold">3. Gentle check-in (3 min)</p>
+                        <p className="text-xs text-primary-foreground/70">Celebrate + set tomorrow&apos;s cue</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="grid gap-3 rounded-2xl bg-black/5 p-5 text-sm">
+                    <div className="flex items-center gap-3">
+                      <span className="flex h-10 w-10 items-center justify-center rounded-full bg-black/15 text-lg">🧘‍♀️</span>
+                      <div>
+                        <p className="font-semibold">Energy check</p>
+                        <p className="text-xs text-primary-foreground/70">“Feeling scattered—give me a gentle start.”</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <span className="flex h-10 w-10 items-center justify-center rounded-full bg-black/15 text-lg">🤝</span>
+                      <div>
+                        <p className="font-semibold">Buddy pulse</p>
+                        <p className="text-xs text-primary-foreground/70">Jess just logged a session—ready when you are.</p>
+                      </div>
+                    </div>
                   </div>
                 </div>
-                <div className="rounded-lg border border-dashed border-border bg-accent px-4 py-6">
-                  <p className="text-sm font-semibold text-foreground">AI encouragement</p>
-                  <p className="mt-2 text-sm text-muted-foreground">
-                    “Half an hour is enough to move things forward today. I’ll check back tonight—celebrate the effort.”
-                  </p>
-                </div>
               </div>
-            </Card>
+            </div>
+          </div>
+        </section>
+
+        {/* Ritual snapshot */}
+        <section className="mx-auto max-w-7xl px-6 pb-20">
+          <div className="grid gap-12 lg:grid-cols-2 lg:items-center">
+            <div className="space-y-6">
+              <span className="inline-flex items-center gap-2 rounded-full bg-secondary px-3 py-1 text-sm text-secondary-foreground">
+                <Sparkles className="h-4 w-4 text-primary" /> Gentle structure that guides you back
+              </span>
+              <h2 className="text-3xl font-semibold text-foreground md:text-4xl">Daily rituals that make starting feel safe</h2>
+              <p className="text-lg text-muted-foreground">
+                Morning intentions, adaptive AI encouragement, and calming evening reflections ensure every session has a beginning, middle, and end—without the pressure spiral.
+              </p>
+              <ul className="grid gap-3 text-sm text-muted-foreground">
+                <li className="flex items-start gap-2">
+                  <CheckCircle className="mt-1 h-4 w-4 text-primary" /> Set one achievable focus with a 30-second prompt.
+                </li>
+                <li className="flex items-start gap-2">
+                  <CheckCircle className="mt-1 h-4 w-4 text-primary" /> Get tone-matched encouragement that keeps momentum gentle.
+                </li>
+                <li className="flex items-start gap-2">
+                  <CheckCircle className="mt-1 h-4 w-4 text-primary" /> Close the loop with a celebratory reflection and streak boost.
+                </li>
+              </ul>
+              <Button variant="ghost" className="px-0" onClick={() => document.getElementById('how-it-works')?.scrollIntoView({ behavior: 'smooth' })}>
+                See the StudySync loop ➜
+              </Button>
+            </div>
+            <div>
+              <Card className="border-border bg-card p-6 shadow-sm">
+                <div className="space-y-5">
+                  <div>
+                    <p className="text-sm font-medium text-muted-foreground">Daily check-in</p>
+                    <p className="mt-2 text-lg font-semibold text-foreground">“What’s one win you want today?”</p>
+                    <div className="mt-4 grid gap-2 text-sm">
+                      {['Prep slides for Biology', 'Review Spanish verbs', 'Email project partner'].map((option) => (
+                        <span key={option} className="rounded-lg border border-border bg-secondary px-3 py-2 text-secondary-foreground">
+                          {option}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                  <div className="rounded-lg border border-dashed border-border bg-accent px-4 py-6">
+                    <p className="text-sm font-semibold text-foreground">AI encouragement</p>
+                    <p className="mt-2 text-sm text-muted-foreground">
+                      “Half an hour is enough to move things forward today. I’ll check back tonight—celebrate the effort.”
+                    </p>
+                  </div>
+                </div>
+              </Card>
+            </div>
           </div>
         </section>
 
         {/* Problem */}
         <section className="bg-card py-16">
-          <div className="mx-auto max-w-6xl px-6 text-center">
+          <div className="mx-auto max-w-7xl px-6 text-center">
             <h2 className="text-3xl font-semibold text-foreground md:text-4xl">Why most study tools fall short</h2>
             <p className="mt-4 text-base text-muted-foreground md:text-lg">
               Learners don’t just need more content—they need steady accountability, pacing support, and an environment that reduces pressure.
@@ -140,7 +197,7 @@ export default function Landing() {
         </section>
 
         {/* How it works */}
-        <section id="how-it-works" className="mx-auto max-w-6xl px-6 py-16">
+        <section id="how-it-works" className="mx-auto max-w-7xl px-6 py-16">
           <div className="text-center">
             <h2 className="text-3xl font-semibold text-foreground md:text-4xl">A three-part habit loop</h2>
             <p className="mt-3 text-base text-muted-foreground md:text-lg">
@@ -183,7 +240,7 @@ export default function Landing() {
 
         {/* Differentiators */}
         <section className="bg-secondary py-16">
-          <div className="mx-auto max-w-6xl px-6">
+          <div className="mx-auto max-w-7xl px-6">
             <div className="text-center">
               <h2 className="text-3xl font-semibold text-foreground md:text-4xl">Gentle, honest motivation</h2>
               <p className="mt-3 text-base text-muted-foreground md:text-lg">
@@ -219,7 +276,7 @@ export default function Landing() {
         </section>
 
         {/* Testimonials */}
-        <section className="mx-auto max-w-6xl px-6 py-16">
+        <section className="mx-auto max-w-7xl px-6 py-16">
           <div className="text-center">
             <h2 className="text-3xl font-semibold text-foreground md:text-4xl">Learners who finally found consistency</h2>
           </div>
@@ -247,8 +304,8 @@ export default function Landing() {
         </section>
 
         {/* Pricing */}
-        <section className="bg-card py-16">
-          <div className="mx-auto max-w-6xl px-6">
+        <section id="pricing" className="bg-card py-16">
+          <div className="mx-auto max-w-7xl px-6">
             <div className="text-center">
               <h2 className="text-3xl font-semibold text-foreground md:text-4xl">Simple pricing for real habits</h2>
               <p className="mt-3 text-base text-muted-foreground md:text-lg">Free to start. Upgrade when daily check-ins become your thing.</p>
@@ -274,7 +331,7 @@ export default function Landing() {
                     Shared study rooms
                   </li>
                 </ul>
-                <Button className="mt-6 w-full border border-border bg-card text-foreground hover:bg-secondary" onClick={() => navigate('/signup')}>
+                <Button variant="outline" className="mt-6 w-full" onClick={() => navigate('/signup')}>
                   Try for free
                 </Button>
               </Card>
@@ -302,7 +359,7 @@ export default function Landing() {
                     Buddy matching experiments
                   </li>
                 </ul>
-                <Button className="mt-6 w-full bg-primary text-primary-foreground hover:bg-primary/90" onClick={() => navigate('/signup')}>
+                <Button className="mt-6 w-full" onClick={() => navigate('/signup')}>
                   Start 7-day trial
                 </Button>
               </Card>
@@ -312,26 +369,7 @@ export default function Landing() {
         </section>
       </main>
 
-      <footer className="border-t border-border bg-card">
-        <div className="mx-auto flex max-w-6xl flex-col gap-4 px-6 py-8 text-sm text-muted-foreground md:flex-row md:items-center md:justify-between">
-          <div className="flex items-center gap-2">
-            <Brain className="h-5 w-5 text-primary" />
-            <span className="font-semibold text-foreground">StudySync</span>
-            <span>© {new Date().getFullYear()}</span>
-          </div>
-          <div className="flex items-center gap-5">
-            <a href="#" className="hover:text-foreground">
-              Privacy
-            </a>
-            <a href="#" className="hover:text-foreground">
-              Terms
-            </a>
-            <a href="mailto:hello@studysync.ai" className="hover:text-foreground">
-              Support
-            </a>
-          </div>
-        </div>
-      </footer>
+      <SiteFooter />
     </div>
   )
 }

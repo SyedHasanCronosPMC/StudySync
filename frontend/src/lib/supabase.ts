@@ -61,6 +61,24 @@ export interface DailyCheckIn {
   focus_score: number | null
 }
 
+export interface HabitSummary {
+  profile: UserProfile
+  window: number
+  totals: {
+    minutes: number
+    tasks: number
+    focus: number | null
+    consistencyRate: number
+    bestDay: string | null
+  }
+  daily: {
+    check_in_date: string
+    study_minutes: number | null
+    tasks_completed: number | null
+    focus_score: number | null
+  }[]
+}
+
 export interface Task {
   id: string
   user_id: string
@@ -93,6 +111,7 @@ export interface StudyRoom {
   max_participants: number
   current_participants: number
   is_active: boolean
+  average_focus?: number | null
   room_type: 'focus' | 'casual' | 'exam_prep' | 'group_project'
   created_by: string | null
   started_at: string | null
@@ -112,4 +131,36 @@ export interface RoomParticipant {
   current_task: string | null
   study_minutes: number
   messages_sent: number
+}
+
+export interface RoomSummary {
+  room: StudyRoom
+  participants: Array<RoomParticipant & { profile: Pick<UserProfile, 'id' | 'display_name' | 'avatar_url' | 'current_streak'> | null }>
+}
+
+export interface BuddyOverviewEntry {
+  id: string
+  status: 'pending' | 'active' | 'ended' | 'paused'
+  matched_at: string
+  compatibility_score: number | null
+  match_reasons: string[]
+  buddy_id: string | null
+  buddy_profile: Pick<UserProfile, 'id' | 'display_name' | 'avatar_url' | 'current_streak'> | null
+}
+
+export interface BuddyOverview {
+  pending: BuddyOverviewEntry | null
+  active: BuddyOverviewEntry | null
+  history: BuddyOverviewEntry[]
+}
+
+export interface Achievement {
+  id: string
+  user_id: string
+  badge_type: string
+  badge_name: string
+  badge_description: string | null
+  badge_icon: string | null
+  milestone_value: number | null
+  earned_at: string
 }
