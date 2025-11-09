@@ -36,7 +36,7 @@ export function ProgressRings({ studyMinutes, goalMinutes, tasksCompleted, focus
               fill="none"
               strokeDasharray={`${2 * Math.PI * 40}`}
               strokeDashoffset={`${2 * Math.PI * 40 * (1 - studyProgress / 100)}`}
-              className="text-purple-500 transition-all duration-1000"
+              className="text-primary transition-all duration-1000"
               strokeLinecap="round"
             />
           </svg>
@@ -75,7 +75,7 @@ export function ProgressRings({ studyMinutes, goalMinutes, tasksCompleted, focus
               fill="none"
               strokeDasharray={`${2 * Math.PI * 40}`}
               strokeDashoffset={`${2 * Math.PI * 40 * (1 - taskProgress / 100)}`}
-              className="text-green-500 transition-all duration-1000"
+              className="text-primary/70 transition-all duration-1000"
               strokeLinecap="round"
             />
           </svg>
@@ -112,7 +112,7 @@ export function ProgressRings({ studyMinutes, goalMinutes, tasksCompleted, focus
               fill="none"
               strokeDasharray={`${2 * Math.PI * 40}`}
               strokeDashoffset={`${2 * Math.PI * 40 * (1 - focusProgress / 100)}`}
-              className="text-blue-500 transition-all duration-1000"
+              className="text-primary/40 transition-all duration-1000"
               strokeLinecap="round"
             />
           </svg>

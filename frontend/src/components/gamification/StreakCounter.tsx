@@ -9,25 +9,25 @@ interface StreakCounterProps {
 
 export function StreakCounter({ currentStreak, longestStreak }: StreakCounterProps) {
   return (
-    <Card className="bg-gradient-to-br from-orange-900/30 to-red-900/30 border-orange-800">
+    <Card className="border border-primary/20 bg-primary/5">
       <CardContent className="p-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="relative">
-              <Flame className="w-10 h-10 text-orange-400" />
+              <Flame className="w-10 h-10 text-primary" />
               {currentStreak > 0 && (
-                <div className="absolute -top-1 -right-1 bg-orange-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
+                <div className="absolute -top-1 -right-1 bg-primary text-primary-foreground text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
                   {currentStreak}
                 </div>
               )}
             </div>
             <div>
-              <div className="text-2xl font-bold text-white">{currentStreak} days</div>
-              <div className="text-sm text-orange-300">Current streak</div>
+              <div className="text-2xl font-semibold text-foreground">{currentStreak} days</div>
+              <div className="text-sm text-muted-foreground">Current streak</div>
             </div>
           </div>
           <div className="text-right">
-            <div className="flex items-center gap-1 text-yellow-400">
+            <div className="flex items-center gap-1 text-muted-foreground">
               <Trophy className="w-4 h-4" />
               <span className="text-sm font-medium">{longestStreak}</span>
             </div>

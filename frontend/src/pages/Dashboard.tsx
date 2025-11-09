@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
-import { supabase } from '@/lib/supabase'
+import type { UserProfile, DailyCheckIn } from '@/lib/supabase'
 import { useStore } from '@/lib/store'
+import { callAppFunction } from '@/lib/api'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Brain, Target, Users, Clock, TrendingUp, Settings as SettingsIcon } from 'lucide-react'
@@ -33,37 +34,31 @@ export default function Dashboard() {
 
   const loadDashboardData = async () => {
     try {
-      // Load user profile
-      const { data: profileData, error: profileError } = await supabase
-        .from('user_profiles')
-        .select('*')
-        .eq('id', user.id)
-        .single()
+      const { profile: profileData, todayCheckIn } = await callAppFunction<{
+        profile: UserProfile
+        todayCheckIn: DailyCheckIn | null
+      }>('dashboard.load')
 
-      if (profileError) throw profileError
       setProfile(profileData)
 
-      // Load today's check-in
-      const today = new Date().toISOString().split('T')[0]
-      const { data: checkInData } = await supabase
-        .from('daily_check_ins')
-        .select('*')
-        .eq('user_id', user.id)
-        .eq('check_in_date', today)
-        .single()
-
-      if (checkInData) {
-        setTodayCheckIn(checkInData)
+      if (todayCheckIn) {
+        setTodayCheckIn(todayCheckIn)
         setTodayStats({
-          studyMinutes: checkInData.study_minutes || 0,
-          tasksCompleted: checkInData.tasks_completed || 0,
-          focusScore: checkInData.focus_score || 0,
+          studyMinutes: todayCheckIn.study_minutes || 0,
+          tasksCompleted: todayCheckIn.tasks_completed || 0,
+          focusScore: todayCheckIn.focus_score || 0,
+        })
+      } else {
+        setTodayCheckIn(null)
+        setTodayStats({
+          studyMinutes: 0,
+          tasksCompleted: 0,
+          focusScore: 0,
         })
       }
 
-      // Check if we should show check-ins
-      setShowMorningCheckIn(shouldShowMorningCheckIn(checkInData))
-      setShowEveningCheckIn(shouldShowEveningCheckIn(checkInData))
+      setShowMorningCheckIn(shouldShowMorningCheckIn(todayCheckIn))
+      setShowEveningCheckIn(shouldShowEveningCheckIn(todayCheckIn))
     } catch (error) {
       console.error('Error loading dashboard:', error)
     } finally {
@@ -107,7 +102,7 @@ export default function Dashboard() {
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
           <div>
-            <h1 className="text-3xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+            <h1 className="text-3xl font-semibold text-foreground">
               {getDayGreeting()}, {profile?.display_name || 'Friend'}! 🌟
             </h1>
             <p className="text-muted-foreground mt-2">{getMotivationalMessage(profile, todayStats)}</p>
@@ -132,25 +127,25 @@ export default function Dashboard() {
 
         {/* Quick Actions */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-          <Card className="bg-card border-border hover:border-purple-600 transition-colors cursor-pointer">
+          <Card className="bg-card border-border hover:border-primary transition-colors cursor-pointer">
             <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-purple-400">
+              <CardTitle className="flex items-center gap-2 text-primary">
                 <Brain className="w-5 h-5" />
                 Quick Focus
               </CardTitle>
               <CardDescription>Start a 25-minute study session</CardDescription>
             </CardHeader>
             <CardContent>
-              <Button className="w-full bg-purple-600 hover:bg-purple-700" onClick={() => navigate('/pomodoro')}>
+              <Button className="w-full bg-primary text-primary-foreground hover:bg-primary/90" onClick={() => navigate('/pomodoro')}>
                 <Clock className="w-4 h-4 mr-2" />
                 Start Session
               </Button>
             </CardContent>
           </Card>
 
-          <Card className="bg-card border-border hover:border-green-600 transition-colors">
+          <Card className="bg-card border-border hover:border-primary transition-colors">
             <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-green-400">
+              <CardTitle className="flex items-center gap-2 text-primary">
                 <Target className="w-5 h-5" />
                 Break Down Task
               </CardTitle>
@@ -161,16 +156,16 @@ export default function Dashboard() {
             </CardContent>
           </Card>
 
-          <Card className="bg-card border-border hover:border-blue-600 transition-colors cursor-pointer">
+          <Card className="bg-card border-border hover:border-primary transition-colors cursor-pointer">
             <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-blue-400">
+              <CardTitle className="flex items-center gap-2 text-primary">
                 <Users className="w-5 h-5" />
                 Study Together
               </CardTitle>
               <CardDescription>Join others studying right now</CardDescription>
             </CardHeader>
             <CardContent>
-              <Button className="w-full bg-blue-600 hover:bg-blue-700" onClick={() => navigate('/study-rooms')}>
+              <Button className="w-full bg-primary text-primary-foreground hover:bg-primary/90" onClick={() => navigate('/study-rooms')}>
                 <Users className="w-4 h-4 mr-2" />
                 Browse Rooms
               </Button>
@@ -205,9 +200,9 @@ export default function Dashboard() {
         </Card>
 
         {/* Motivational Quote */}
-        <Card className="bg-gradient-to-r from-purple-900/30 to-pink-900/30 border-purple-800">
+        <Card className="border border-primary/20 bg-primary/5">
           <CardContent className="p-6 text-center">
-            <p className="text-lg italic text-purple-200">
+            <p className="text-lg italic text-foreground">
               "Progress, not perfection. Showing up is winning."
             </p>
             <p className="text-sm text-muted-foreground mt-2">— Your StudySync companion</p>

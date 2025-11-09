@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { supabase } from '@/lib/supabase'
 import { useStore } from '@/lib/store'
+import { callAppFunction } from '@/lib/api'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -60,16 +60,8 @@ export default function Settings() {
   const handleSave = async () => {
     setLoading(true)
     try {
-      const { data, error } = await supabase
-        .from('user_profiles')
-        .update(formData)
-        .eq('id', user.id)
-        .select()
-        .single()
-
-      if (error) throw error
-
-      setProfile(data)
+      const { profile: updatedProfile } = await callAppFunction('profile.update', formData)
+      setProfile(updatedProfile)
       alert('Settings saved successfully!')
     } catch (error) {
       console.error('Error saving settings:', error)
@@ -87,7 +79,7 @@ export default function Settings() {
           Back to Dashboard
         </Button>
 
-        <h1 className="text-3xl font-bold mb-2 bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+        <h1 className="text-3xl font-semibold mb-2 text-foreground">
           Settings
         </h1>
         <p className="text-muted-foreground mb-8">Personalize your StudySync experience</p>

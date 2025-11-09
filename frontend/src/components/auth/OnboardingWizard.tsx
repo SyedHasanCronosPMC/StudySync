@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
-import { supabase } from '@/lib/supabase'
-import { useStore } from '@/lib/store'
+import { callAppFunction } from '@/lib/api'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -13,7 +12,6 @@ interface OnboardingWizardProps {
 }
 
 export function OnboardingWizard({ onComplete }: OnboardingWizardProps) {
-  const { user } = useStore()
   const [step, setStep] = useState(1)
   const [loading, setLoading] = useState(false)
   const [formData, setFormData] = useState({
@@ -30,15 +28,10 @@ export function OnboardingWizard({ onComplete }: OnboardingWizardProps) {
   const handleComplete = async () => {
     setLoading(true)
     try {
-      const { error } = await supabase
-        .from('user_profiles')
-        .update({
-          ...formData,
-          onboarding_completed: true,
-        })
-        .eq('id', user.id)
-
-      if (error) throw error
+      await callAppFunction('profile.update', {
+        ...formData,
+        onboarding_completed: true,
+      })
       onComplete()
     } catch (error) {
       console.error('Error completing onboarding:', error)
@@ -55,7 +48,7 @@ export function OnboardingWizard({ onComplete }: OnboardingWizardProps) {
             <div className="flex justify-center">
               <div className="text-7xl mb-4">👋</div>
             </div>
-            <h2 className="text-2xl font-bold text-center bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+            <h2 className="text-2xl font-bold text-center text-foreground">
               Welcome to StudySync!
             </h2>
             <p className="text-muted-foreground text-center">
@@ -80,7 +73,7 @@ export function OnboardingWizard({ onComplete }: OnboardingWizardProps) {
         return (
           <div className="space-y-6">
             <div className="flex justify-center">
-              <Brain className="w-16 h-16 text-purple-400" />
+              <Brain className="w-16 h-16 text-primary" />
             </div>
             <h2 className="text-2xl font-bold text-center">
               Tell us about your learning style
@@ -149,7 +142,7 @@ export function OnboardingWizard({ onComplete }: OnboardingWizardProps) {
         return (
           <div className="space-y-6">
             <div className="flex justify-center">
-              <Target className="w-16 h-16 text-green-400" />
+              <Target className="w-16 h-16 text-primary" />
             </div>
             <h2 className="text-2xl font-bold text-center">
               Set your study preferences
@@ -224,8 +217,8 @@ export function OnboardingWizard({ onComplete }: OnboardingWizardProps) {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-900 via-gray-900 to-pink-900 p-4">
-      <Card className="w-full max-w-md">
+    <div className="min-h-screen flex items-center justify-center bg-background p-4">
+      <Card className="w-full max-w-md border border-border">
         <CardHeader>
           <div className="flex justify-between items-center mb-2">
             <div className="text-sm text-muted-foreground">Step {step} of 3</div>

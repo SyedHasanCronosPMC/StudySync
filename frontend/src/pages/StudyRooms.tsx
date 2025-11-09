@@ -1,17 +1,16 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { supabase } from '@/lib/supabase'
-import { useStore } from '@/lib/store'
+import { callAppFunction } from '@/lib/api'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { ArrowLeft, Users, Plus, Clock, User } from 'lucide-react'
+import { ArrowLeft, Users, Plus, Clock } from 'lucide-react'
 import type { StudyRoom } from '@/lib/supabase'
 
 export default function StudyRooms() {
   const navigate = useNavigate()
-  const { user } = useStore()
   const [rooms, setRooms] = useState<StudyRoom[]>([])
   const [loading, setLoading] = useState(true)
   const [showCreateForm, setShowCreateForm] = useState(false)
@@ -38,14 +37,8 @@ export default function StudyRooms() {
 
   const loadRooms = async () => {
     try {
-      const { data, error } = await supabase
-        .from('study_rooms')
-        .select('*')
-        .eq('is_active', true)
-        .order('created_at', { ascending: false })
-
-      if (error) throw error
-      setRooms(data || [])
+      const { rooms: fetchedRooms } = await callAppFunction<{ rooms: StudyRoom[] }>('studyRooms.list')
+      setRooms(fetchedRooms)
     } catch (error) {
       console.error('Error loading rooms:', error)
     } finally {
@@ -55,14 +48,7 @@ export default function StudyRooms() {
 
   const createRoom = async () => {
     try {
-      const { error } = await supabase.from('study_rooms').insert({
-        ...newRoom,
-        created_by: user.id,
-        is_active: true,
-      })
-
-      if (error) throw error
-
+      await callAppFunction('studyRooms.create', newRoom)
       setShowCreateForm(false)
       setNewRoom({ name: '', subject: '', max_participants: 10 })
       loadRooms()
@@ -73,15 +59,17 @@ export default function StudyRooms() {
 
   const joinRoom = async (roomId: string) => {
     try {
-      const { error } = await supabase.from('room_participants').insert({
-        room_id: roomId,
-        user_id: user.id,
-        status: 'studying',
+      const result = await callAppFunction<{ joined?: boolean; alreadyJoined?: boolean }>('studyRooms.join', {
+        roomId,
       })
 
-      if (error) throw error
-      // Navigate to room detail or show success
+      if (result.alreadyJoined) {
+        alert('You are already in this room!')
+        return
+      }
+
       alert('Joined room successfully!')
+      loadRooms()
     } catch (error: any) {
       console.error('Error joining room:', error)
       if (error.code === '23505') {
@@ -104,7 +92,7 @@ export default function StudyRooms() {
           </Button>
         </div>
 
-        <h1 className="text-3xl font-bold mb-2 bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+        <h1 className="text-3xl font-semibold mb-2 text-foreground">
           Study Rooms
         </h1>
         <p className="text-muted-foreground mb-8">Join others who are studying right now. Anonymous and supportive.</p>
@@ -181,7 +169,7 @@ export default function StudyRooms() {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {rooms.map((room) => (
-              <Card key={room.id} className="bg-card border-border hover:border-purple-600 transition-colors">
+              <Card key={room.id} className="bg-card border-border hover:border-primary transition-colors">
                 <CardHeader>
                   <CardTitle className="text-lg">{room.name}</CardTitle>
                   {room.subject && <CardDescription>{room.subject}</CardDescription>}

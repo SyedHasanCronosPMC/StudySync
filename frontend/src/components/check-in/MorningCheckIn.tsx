@@ -24,8 +24,11 @@ export function MorningCheckIn({ onComplete }: MorningCheckInProps) {
     setLoading(true)
     try {
       const { data, error } = await supabase.functions.invoke('check-in', {
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        },
         body: {
-          user_id: user.id,
           type: 'morning',
           responses: {
             energy,
@@ -56,7 +59,7 @@ export function MorningCheckIn({ onComplete }: MorningCheckInProps) {
         <Card className="w-full max-w-lg">
           <CardHeader>
             <div className="flex items-center gap-2">
-              <Sparkles className="w-6 h-6 text-purple-400" />
+              <Sparkles className="w-6 h-6 text-primary" />
               <CardTitle>Your AI Companion Says...</CardTitle>
             </div>
           </CardHeader>
@@ -75,8 +78,8 @@ export function MorningCheckIn({ onComplete }: MorningCheckInProps) {
     <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4">
       <Card className="w-full max-w-lg">
         <CardHeader>
-          <div className="flex items-center gap-2">
-            <Sun className="w-6 h-6 text-yellow-400" />
+            <div className="flex items-center gap-2">
+              <Sun className="w-6 h-6 text-primary" />
             <CardTitle>Good Morning! 🌞</CardTitle>
           </div>
           <CardDescription>Let's start your day with a quick check-in</CardDescription>
@@ -93,7 +96,7 @@ export function MorningCheckIn({ onComplete }: MorningCheckInProps) {
                 onChange={(e) => setEnergy(parseInt(e.target.value))}
                 className="w-full"
               />
-              <span className="text-2xl font-bold text-purple-400 w-8">{energy}</span>
+              <span className="text-2xl font-semibold text-primary w-8">{energy}</span>
             </div>
             <div className="text-sm text-muted-foreground">
               {energy <= 3 && 'Low energy - that\'s okay, we\'ll start gentle'}

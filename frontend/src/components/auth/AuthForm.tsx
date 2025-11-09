@@ -59,16 +59,16 @@ export function AuthForm({ onSuccess, mode = 'login' }: AuthFormProps) {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-900 via-gray-900 to-pink-900 p-4">
-      <Card className="w-full max-w-md">
+    <div className="min-h-screen flex items-center justify-center bg-background p-4">
+      <Card className="w-full max-w-md border border-border">
         <CardHeader className="space-y-3">
           <div className="flex justify-center mb-4">
             <div className="text-6xl">🧠</div>
           </div>
-          <CardTitle className="text-3xl text-center bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+          <CardTitle className="text-3xl text-center text-foreground">
             StudySync
           </CardTitle>
-          <CardDescription className="text-center text-base">
+          <CardDescription className="text-center text-base text-muted-foreground">
             Your AI accountability buddy for focused, consistent learning
           </CardDescription>
         </CardHeader>
@@ -102,13 +102,13 @@ export function AuthForm({ onSuccess, mode = 'login' }: AuthFormProps) {
             {error && (
               <div className={`text-sm rounded-md p-3 ${
                 error.includes('Success') || error.includes('✉️')
-                  ? 'text-green-400 bg-green-900/20 border border-green-800'
-                  : 'text-red-400 bg-red-900/20 border border-red-800'
+                  ? 'border border-primary/30 bg-accent text-primary-foreground'
+                  : 'border border-destructive/30 bg-destructive/10 text-destructive'
               }`}>
                 {error}
               </div>
             )}
-            <Button type="submit" className="w-full" disabled={loading}>
+            <Button type="submit" className="w-full bg-primary text-primary-foreground hover:bg-primary/90" disabled={loading}>
               {loading ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />

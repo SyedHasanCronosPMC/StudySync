@@ -107,6 +107,14 @@ supabase functions list
 ### Issue: "CORS error" 
 **Solution:** Edge Functions include CORS headers already. Check that functions are deployed.
 
+### Monitoring & Alerts
+- GitHub Actions (`.github/workflows/ci.yml`) runs lint/build checks automatically—monitor the Actions tab for failures.
+- In Supabase Dashboard → **Observability → Alerts**, add saved queries for:
+  - `metadata.function_name = 'check-in' AND metadata.status_code >= 400`
+  - `event:app-router.error`
+- Configure Slack or email notifications so production failures surface quickly.
+- Provide `VITE_SENTRY_DSN` (see README) to capture frontend exceptions in Sentry.
+
 ## Files Ready for Download
 
 All files are in `/app/` and ready to download:

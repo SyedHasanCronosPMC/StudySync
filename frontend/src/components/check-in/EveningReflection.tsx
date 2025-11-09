@@ -24,8 +24,11 @@ export function EveningReflection({ onComplete, onSkip }: EveningReflectionProps
     setLoading(true)
     try {
       const { data, error } = await supabase.functions.invoke('check-in', {
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        },
         body: {
-          user_id: user.id,
           type: 'evening',
           responses: {
             energy,
@@ -55,7 +58,7 @@ export function EveningReflection({ onComplete, onSkip }: EveningReflectionProps
         <Card className="w-full max-w-lg">
           <CardHeader>
             <div className="flex items-center gap-2">
-              <Sparkles className="w-6 h-6 text-purple-400" />
+              <Sparkles className="w-6 h-6 text-primary" />
               <CardTitle>Reflection</CardTitle>
             </div>
           </CardHeader>
@@ -75,7 +78,7 @@ export function EveningReflection({ onComplete, onSkip }: EveningReflectionProps
       <Card className="w-full max-w-lg">
         <CardHeader>
           <div className="flex items-center gap-2">
-            <Moon className="w-6 h-6 text-blue-400" />
+            <Moon className="w-6 h-6 text-primary" />
             <CardTitle>Evening Reflection 🌙</CardTitle>
           </div>
           <CardDescription>Take a moment to reflect on your day</CardDescription>
@@ -92,7 +95,7 @@ export function EveningReflection({ onComplete, onSkip }: EveningReflectionProps
                 onChange={(e) => setEnergy(parseInt(e.target.value))}
                 className="w-full"
               />
-              <span className="text-2xl font-bold text-blue-400 w-8">{energy}</span>
+              <span className="text-2xl font-semibold text-primary w-8">{energy}</span>
             </div>
           </div>
 

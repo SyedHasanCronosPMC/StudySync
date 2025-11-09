@@ -93,12 +93,12 @@ export default function PomodoroTimer() {
           <CardHeader>
             <CardTitle className="text-center text-2xl">
               {isBreak ? (
-                <span className="flex items-center justify-center gap-2 text-green-400">
+                <span className="flex items-center justify-center gap-2 text-secondary-foreground">
                   <Coffee className="w-6 h-6" />
                   Break Time
                 </span>
               ) : (
-                <span className="text-purple-400">Focus Session</span>
+                <span className="text-primary">Focus Session</span>
               )}
             </CardTitle>
           </CardHeader>
@@ -124,7 +124,7 @@ export default function PomodoroTimer() {
                   fill="none"
                   strokeDasharray={`${2 * Math.PI * 120}`}
                   strokeDashoffset={`${2 * Math.PI * 120 * (1 - progress / 100)}`}
-                  className={isBreak ? 'text-green-500' : 'text-purple-500'}
+                  className={isBreak ? 'text-secondary-foreground' : 'text-primary'}
                   strokeLinecap="round"
                   style={{ transition: 'stroke-dashoffset 1s linear' }}
                 />
@@ -143,7 +143,15 @@ export default function PomodoroTimer() {
 
             {/* Controls */}
             <div className="flex items-center justify-center gap-4">
-              <Button size="lg" onClick={toggleTimer} className={isBreak ? 'bg-green-600 hover:bg-green-700' : 'bg-purple-600 hover:bg-purple-700'}>
+              <Button
+                size="lg"
+                onClick={toggleTimer}
+                className={
+                  isBreak
+                    ? 'bg-secondary text-secondary-foreground hover:bg-secondary/80'
+                    : 'bg-primary text-primary-foreground hover:bg-primary/90'
+                }
+              >
                 {isActive ? (
                   <>
                     <Pause className="w-5 h-5 mr-2" />
@@ -165,11 +173,13 @@ export default function PomodoroTimer() {
             {/* Stats */}
             <div className="grid grid-cols-2 gap-4 pt-6 border-t border-border">
               <div className="text-center">
-                <div className="text-3xl font-bold text-purple-400">{completedSessions}</div>
+                <div className="text-3xl font-semibold text-primary">{completedSessions}</div>
                 <div className="text-sm text-muted-foreground">Sessions Today</div>
               </div>
               <div className="text-center">
-                <div className="text-3xl font-bold text-green-400">{completedSessions * (profile?.preferred_study_duration || 25)}</div>
+                <div className="text-3xl font-semibold text-secondary-foreground">
+                  {completedSessions * (profile?.preferred_study_duration || 25)}
+                </div>
                 <div className="text-sm text-muted-foreground">Minutes Focused</div>
               </div>
             </div>

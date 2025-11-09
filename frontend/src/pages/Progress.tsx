@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { supabase } from '@/lib/supabase'
+import type { DailyCheckIn } from '@/lib/supabase'
 import { useStore } from '@/lib/store'
+import { callAppFunction } from '@/lib/api'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { ArrowLeft, TrendingUp, Calendar, Clock, Target } from 'lucide-react'
@@ -9,29 +10,25 @@ import { formatDuration } from '@/lib/utils'
 
 export default function Progress() {
   const navigate = useNavigate()
-  const { user, profile } = useStore()
+  const { profile } = useStore()
   const [stats, setStats] = useState({
     totalStudyMinutes: 0,
     totalTasks: 0,
     weeklyMinutes: 0,
     averageFocus: 0,
   })
-  const [recentCheckIns, setRecentCheckIns] = useState<any[]>([])
+  const [recentCheckIns, setRecentCheckIns] = useState<DailyCheckIn[]>([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
+    if (!profile) return
     loadProgressData()
-  }, [user])
+  }, [profile?.id])
 
   const loadProgressData = async () => {
     try {
       // Get all check-ins
-      const { data: checkIns } = await supabase
-        .from('daily_check_ins')
-        .select('*')
-        .eq('user_id', user.id)
-        .order('check_in_date', { ascending: false })
-        .limit(30)
+      const { checkIns } = await callAppFunction<{ checkIns: DailyCheckIn[] }>('progress.load')
 
       if (checkIns) {
         setRecentCheckIns(checkIns.slice(0, 7))
@@ -75,7 +72,7 @@ export default function Progress() {
           Back to Dashboard
         </Button>
 
-        <h1 className="text-3xl font-bold mb-2 bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+        <h1 className="text-3xl font-semibold mb-2 text-foreground">
           Your Progress
         </h1>
         <p className="text-muted-foreground mb-8">Celebrate every step forward 🎉</p>
@@ -90,7 +87,7 @@ export default function Progress() {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-3xl font-bold text-purple-400">
+              <div className="text-3xl font-semibold text-primary">
                 {formatDuration(stats.totalStudyMinutes)}
               </div>
               <p className="text-xs text-muted-foreground mt-1">All time</p>
@@ -105,7 +102,7 @@ export default function Progress() {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-3xl font-bold text-green-400">{stats.totalTasks}</div>
+              <div className="text-3xl font-semibold text-primary">{stats.totalTasks}</div>
               <p className="text-xs text-muted-foreground mt-1">All time</p>
             </CardContent>
           </Card>
@@ -118,7 +115,7 @@ export default function Progress() {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-3xl font-bold text-blue-400">
+              <div className="text-3xl font-semibold text-secondary-foreground">
                 {formatDuration(stats.weeklyMinutes)}
               </div>
               <p className="text-xs text-muted-foreground mt-1">Last 7 days</p>
@@ -133,7 +130,7 @@ export default function Progress() {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-3xl font-bold text-yellow-400">{stats.averageFocus}/10</div>
+              <div className="text-3xl font-semibold text-primary">{stats.averageFocus}/10</div>
               <p className="text-xs text-muted-foreground mt-1">Average</p>
             </CardContent>
           </Card>
@@ -170,7 +167,7 @@ export default function Progress() {
                       )}
                     </div>
                     <div className="text-right">
-                      <div className="text-lg font-bold text-purple-400">
+                      <div className="text-lg font-semibold text-primary">
                         {formatDuration(checkIn.study_minutes || 0)}
                       </div>
                       <div className="text-sm text-muted-foreground">
@@ -185,9 +182,9 @@ export default function Progress() {
         </Card>
 
         {/* Insights */}
-        <Card className="bg-gradient-to-r from-purple-900/30 to-pink-900/30 border-purple-800 mt-8">
+        <Card className="border border-primary/20 bg-primary/5 mt-8">
           <CardContent className="py-8">
-            <h3 className="text-xl font-bold mb-4">Keep Going! 💪</h3>
+            <h3 className="text-xl font-semibold mb-4 text-foreground">Keep Going! 💪</h3>
             <div className="space-y-2 text-muted-foreground">
               <p>• You've studied {formatDuration(stats.totalStudyMinutes)} total - that's amazing!</p>
               <p>• Every session counts, even the short ones</p>

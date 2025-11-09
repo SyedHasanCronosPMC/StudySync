@@ -25,8 +25,11 @@ export function TaskDecomposer({ onTaskCreated }: TaskDecomposerProps) {
 
     try {
       const { data, error } = await supabase.functions.invoke('decompose-task', {
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        },
         body: {
-          user_id: user.id,
           task_input: taskInput,
           user_profile: {
             conditions: [
@@ -94,7 +97,7 @@ export function TaskDecomposer({ onTaskCreated }: TaskDecomposerProps) {
               className="flex items-center justify-between p-3 bg-background rounded-md hover:bg-accent transition-colors"
             >
               <div className="flex items-center gap-3">
-                <span className="text-purple-400 font-semibold">{idx + 1}.</span>
+                <span className="text-primary font-semibold">{idx + 1}.</span>
                 <span className="text-foreground">{task.title}</span>
               </div>
               <span className="text-sm text-muted-foreground">{task.duration_minutes} min</span>

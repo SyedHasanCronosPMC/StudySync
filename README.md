@@ -176,6 +176,11 @@ http://localhost:3000
 VITE_SUPABASE_URL=https://jygnmkuezhhuycecnfef.supabase.co
 VITE_SUPABASE_ANON_KEY=your-anon-key
 VITE_API_URL=https://jygnmkuezhhuycecnfef.supabase.co/functions/v1
+VITE_SENTRY_DSN= # optional
+VITE_SENTRY_TRACES_SAMPLE_RATE=0.1
+VITE_SENTRY_REPLAYS_SESSION_SAMPLE_RATE=0.05
+VITE_SENTRY_REPLAYS_ERROR_SAMPLE_RATE=1.0
+VITE_APP_ENV=development
 ```
 
 ### **Edge Functions (Supabase Secrets)**
@@ -290,6 +295,11 @@ SELECT * FROM study_rooms WHERE is_active = true;
 - Target: $5K MRR in 2 months
 - Target: 250 paid users by month 3
 - Pricing: $15-20/month (neurodivergent users have higher WTP)
+
+### **Monitoring & Alerting**
+- CI pipeline (`.github/workflows/ci.yml`) runs lint/build for the frontend and format/lint checks for Deno edge functions on every push/PR.
+- Optional Sentry monitoring is wired via `frontend/src/lib/monitoring.ts`. Provide the `VITE_SENTRY_*` variables to collect traces and session replays.
+- Edge functions log structured events (`event=check-in.completed`, `event=app-router.error`). Use Supabase **Logs → Log Explorer** to create saved queries and alert rules (email/Slack) watching for `error` events or elevated response times.
 
 ## 🛣️ Roadmap
 

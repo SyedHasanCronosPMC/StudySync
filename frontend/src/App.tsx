@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
-import { supabase } from './lib/supabase'
+import { supabase, type UserProfile } from './lib/supabase'
 import { useStore } from './lib/store'
+import { callAppFunction } from './lib/api'
 import { AuthForm } from './components/auth/AuthForm'
 import { OnboardingWizard } from './components/auth/OnboardingWizard'
 import Landing from './pages/Landing'
@@ -42,14 +43,11 @@ function App() {
 
   const loadProfile = async (userId: string) => {
     try {
-      const { data, error } = await supabase
-        .from('user_profiles')
-        .select('*')
-        .eq('id', userId)
-        .single()
-
-      if (error) throw error
-      setProfile(data)
+      const { profile } = await callAppFunction<{ profile: UserProfile }>('profile.get')
+      if (profile?.id !== userId) {
+        throw new Error('Profile mismatch')
+      }
+      setProfile(profile)
     } catch (error) {
       console.error('Error loading profile:', error)
     } finally {
